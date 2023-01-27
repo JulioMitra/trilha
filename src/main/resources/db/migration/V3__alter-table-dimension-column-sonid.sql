@@ -1,0 +1,1 @@
+ALTER TABLE dimension ADD sonid INT;

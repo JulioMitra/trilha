@@ -7,7 +7,6 @@ public record UpdateDimension(
         @NotNull
         Long id,
         String name,
-
         Long sonid
 
 ) {

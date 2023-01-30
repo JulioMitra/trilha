@@ -3,8 +3,9 @@ package com.mitratrilha.trilha.controller;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mitratrilha.trilha.domain.dimension.*;
+import com.mitratrilha.trilha.repository.DimensionRepository;
+import com.mitratrilha.trilha.service.DimensionService;
 import jakarta.validation.Valid;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("dimen")
@@ -20,6 +20,10 @@ public class DimensionController {
 
     @Autowired
     private DimensionRepository repository;
+
+    @Autowired
+    private DimensionService dimensionService;
+
 
     @PostMapping
     @Transactional
@@ -69,5 +73,26 @@ public class DimensionController {
         return ResponseEntity.ok("Dimensão excluída!");
     }
 
+    @PostMapping("/jdbc")
+    @Transactional
+    public ResponseEntity createDimensionTeste(@RequestBody @Valid CreateDimensionTeste dados) {
+        var dimension = new Dimension(dados);
+        repository.save(dimension);
+        dimensionService.createDimensionTeste(dimension);
+        return ResponseEntity.ok(new DimensionDetail(dimension));
+    }
+
+    @GetMapping("/jdbc/{id}")
+    public List<Dimension> read1(@PathVariable long id) {
+        return dimensionService.findDimensionMember(id);
+    }
+
+    @PostMapping("/jdbc/{id}")
+    @Transactional
+    public ResponseEntity createDimensionMember(@RequestBody @Valid CreateDimensionMember dados, @PathVariable long id) {
+        var dimension = new Dimension(dados);
+        dimensionService.createDimensionMembers(dimension, id);
+        return ResponseEntity.ok(new DimensionDetailMemeber(dados.name()));
+      }
 }
 

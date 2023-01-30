@@ -1,23 +1,15 @@
 package com.mitratrilha.trilha.domain.dimension;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Bean;
-
-import java.util.List;
+import lombok.*;
 
 @Table(name = "dimension")
 @Entity(name = "Dimension")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-
 public class Dimension {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +24,14 @@ public class Dimension {
         this.name = dados.name();
     }
 
+    public Dimension(CreateDimensionTeste dados) {
+
+        this.name = dados.name();
+    }
+
+    public Dimension(CreateDimensionMember dados) {
+        this.name = dados.name();
+    }
 
     public void updateDimension(UpdateDimension dados) {
         if (dados.name() != null) {

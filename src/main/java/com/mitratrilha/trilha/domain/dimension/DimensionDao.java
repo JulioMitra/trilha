@@ -9,5 +9,7 @@ public interface DimensionDao {
 
     List<Dimension> findDimensionMember(Long id);
 
-    int createDimensionMember(Dimension dimension, Long id);
+    List<Dimension> createDimensionMember(Dimension dimension, Long id);
+
+    List<Dimension> findDimensionMemberByNameLast(Long id, String name);
 }

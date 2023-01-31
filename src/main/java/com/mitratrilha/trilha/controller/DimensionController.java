@@ -92,7 +92,7 @@ public class DimensionController {
     public ResponseEntity createDimensionMember(@RequestBody @Valid CreateDimensionMember dados, @PathVariable long id) {
         var dimension = new Dimension(dados);
         dimensionService.createDimensionMembers(dimension, id);
-        return ResponseEntity.ok(new DimensionDetailMemeber(dados.name()));
+        return ResponseEntity.ok(dimensionService.findDimensionMemberByNameLast(id, dimension.getName()));
       }
 }
 

@@ -3,6 +3,8 @@ package com.mitratrilha.trilha.domain.dimension;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Table(name = "dimension")
 @Entity(name = "Dimension")
 @Getter
@@ -32,6 +34,7 @@ public class Dimension {
     public Dimension(CreateDimensionMember dados) {
         this.name = dados.name();
     }
+
 
     public void updateDimension(UpdateDimension dados) {
         if (dados.name() != null) {

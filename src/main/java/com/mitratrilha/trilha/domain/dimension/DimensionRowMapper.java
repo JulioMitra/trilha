@@ -9,6 +9,7 @@ public class DimensionRowMapper implements RowMapper<DimensionDetailMemeber> {
     @Override
     public DimensionDetailMemeber mapRow(ResultSet resultSet, int i) throws SQLException {
         DimensionDetailMemeber dimension = new DimensionDetailMemeber(
+                resultSet.getLong("id"),
                 resultSet.getString("name")
         );
         return dimension;

@@ -2,6 +2,7 @@ package com.mitratrilha.trilha.config;
 
 import com.mitratrilha.trilha.domain.dimension.Dimension;
 import com.mitratrilha.trilha.domain.dimension.DimensionDao;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,19 +42,30 @@ public class DimensionDataSource implements DimensionDao {
     @Override
     public List<Dimension> findDimensionMember(Long id) {
             String sql = "SELECT id, name FROM dimension_" + id + ";";
-            List<Dimension> dimensions = jdbcTemplate.query(sql, (resultSet, i) -> {
-                Dimension dimension = new Dimension();
-                dimension.setId(resultSet.getLong("id"));
-                dimension.setName(resultSet.getString("name"));
-                return dimension;
-            });
-        return dimensions;
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            Dimension dimension = new Dimension();
+            dimension.setId(resultSet.getLong("id"));
+            dimension.setName(resultSet.getString("name"));
+            return dimension;
+        });
     }
 
     @Override
-    public int createDimensionMember(Dimension dimension, Long id) {
+    public List<Dimension> createDimensionMember(Dimension dimension, Long id) {
         String sql = "INSERT INTO dimension_"+ id +"(name) VALUES (?);";
-        return jdbcTemplate.update(sql, dimension.getName());
+        jdbcTemplate.update(sql, dimension.getName());
+        return findDimensionMemberByNameLast(id, dimension.getName())
+        ;
+    }
 
+    @Override
+    public List<Dimension> findDimensionMemberByNameLast(Long id, String name) {
+        String sql = "SELECT id, name FROM dimension_" + id + " WHERE name LIKE '"+name+"' ORDER BY id DESC LIMIT 1;";
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            Dimension dimension = new Dimension();
+            dimension.setId(resultSet.getLong("id"));
+            dimension.setName(resultSet.getString("name"));
+            return dimension;
+        });
     }
 }

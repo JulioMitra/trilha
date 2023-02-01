@@ -45,6 +45,10 @@ public class Dimension {
         this.id = dados.id();
     }
 
+    public Dimension(DeleteDimensionMember dados) {
+        this.id = dados.id();
+    }
+
 
     public void updateDimension(UpdateDimension dados) {
         if (dados.name() != null) {

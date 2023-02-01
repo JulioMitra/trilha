@@ -1,8 +1,8 @@
 package com.mitratrilha.trilha.service;
 
+import com.mitratrilha.trilha.domain.dimension.RelationMember;
 import com.mitratrilha.trilha.domain.dimension.Dimension;
 import com.mitratrilha.trilha.domain.dimension.DimensionDao;
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,12 +31,12 @@ public class DimensionService {
     }
 
 
-    public List<Dimension> createDimensionMembers(Dimension dimension, Long id) {
+    public List<Dimension> createDimensionMember(Dimension dimension, Long id) {
             dimensionDao.createDimensionMember(dimension, id);
         return null;
     }
 
-    public List<Dimension> updateDimensionMembers(Dimension dimension, Long id) {
+    public List<Dimension> updateDimensionMember(Dimension dimension, Long id) {
         dimensionDao.updateDimensionMember(dimension, id);
         return null;
     }
@@ -54,6 +54,17 @@ public class DimensionService {
             return dimensionDao.findDimensionMemberById(id, idMember);
         }
         System.out.println("Valor nulo camada serviço!");
+        return null;
+    }
+
+
+    public List<Dimension> deleteDimensionMember(Dimension idMember, Long id) {
+        dimensionDao.deleteDimensionMember(idMember, id);
+        return null;
+    }
+
+    public List<RelationMember> createRelationMember(RelationMember dimension, Long id) {
+        dimensionDao.createRelationMember(dimension, id);
         return null;
     }
 

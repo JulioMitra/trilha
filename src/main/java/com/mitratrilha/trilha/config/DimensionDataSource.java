@@ -2,6 +2,7 @@ package com.mitratrilha.trilha.config;
 
 import com.mitratrilha.trilha.domain.dimension.Dimension;
 import com.mitratrilha.trilha.domain.dimension.DimensionDao;
+import com.mitratrilha.trilha.domain.dimension.RelationMember;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -29,8 +30,7 @@ public class DimensionDataSource implements DimensionDao {
             String sql = "CREATE TABLE IF NOT EXISTS dimension_" + dimension.getId() + "("
                          + "id int not null PRIMARY KEY,"
                          + "name varchar(100) not null,"
-                         + "sonid int,"
-                         + "CONSTRAINT fk_sonid_id FOREIGN KEY (sonid) REFERENCES dimension_" + dimension.getId() + " (id) ON DELETE SET NULL"
+                         + "sonid int"
                          + ");";
             jdbcTemplate.execute(sql);
         }
@@ -88,6 +88,20 @@ public class DimensionDataSource implements DimensionDao {
             String sql = "UPDATE dimension_" + id + " SET sonid = ? WHERE id = ?;";
             return jdbcTemplate.update(sql, dimension.getSonid(), dimension.getId());
         }
+        return 0;
+    }
+
+    @Override
+    public int deleteDimensionMember(Dimension dimension, Long id) {
+        String sql = "DELETE FROM dimension_" + dimension.getId() + " WHERE id = "+dimension.getId()+";";
+        return jdbcTemplate.update(sql);
+    }
+
+
+    @Override
+    public int createRelationMember(RelationMember id, Long idPai) {
+        String sql = "ALTER TABLE dimension_" +id.getIdTabelaFilho()  + " ADD COLUMN dimension_"+idPai+" INT IF NOT EXISTS WHERE id = ";
+
         return 0;
     }
 }

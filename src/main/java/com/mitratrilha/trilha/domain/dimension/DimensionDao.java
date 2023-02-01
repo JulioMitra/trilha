@@ -15,4 +15,8 @@ public interface DimensionDao {
     List<Dimension> findDimensionMemberById(Long id, Long idMembro);
 
     int updateDimensionMember(Dimension dimension, Long id);
+
+    int deleteDimensionMember(Dimension idMembro, Long id);
+
+    int createRelationMember(RelationMember id, Long id);
 }

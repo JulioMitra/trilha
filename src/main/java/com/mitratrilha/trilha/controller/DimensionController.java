@@ -81,6 +81,7 @@ public class DimensionController {
         return ResponseEntity.ok(new DimensionDetail(dimension));
     }
 
+    // Membro de Dimensão
     @GetMapping("/member/{id}")
     public List<Dimension> findDimensionMember(@PathVariable long id) {
         return dimensionService.findDimensionMember(id);
@@ -90,7 +91,7 @@ public class DimensionController {
     @Transactional
     public ResponseEntity createDimensionMember(@RequestBody @Valid CreateDimensionMember dados, @PathVariable long id) {
         var dimension = new Dimension(dados);
-        dimensionService.createDimensionMembers(dimension, id);
+        dimensionService.createDimensionMember(dimension, id);
         return ResponseEntity.ok(new DimensionDetailMemeber(dimension));
       }
 
@@ -98,8 +99,25 @@ public class DimensionController {
     @Transactional
     public ResponseEntity updateDimensionMember(@RequestBody @Valid UpdateDimensionMember dados, @PathVariable long id) {
         var dimension = new Dimension(dados);
-        dimensionService.updateDimensionMembers(dimension, id);
+        dimensionService.updateDimensionMember(dimension, id);
         return ResponseEntity.ok(dimensionService.findDimensionMemberById(id, dimension.getId()));
+    }
+
+    @DeleteMapping("/member/{id}")
+    @Transactional
+    public ResponseEntity deleteDimensionMember(@RequestBody @Valid DeleteDimensionMember dados, @PathVariable Long id) {
+        var dimension = new Dimension(dados);
+        dimensionService.deleteDimensionMember(dimension, id);
+        return  ResponseEntity.ok("Membro com id: "+dimension.getId()+" excluído!");
+    }
+
+    // Relacionamento de Membros de Dimensão
+    @PostMapping("/relation/{id}")
+    @Transactional
+    public ResponseEntity createRelationMember(@RequestBody @Valid CreateRelationMember dados, @PathVariable Long id) {
+        var dimension = new RelationMember(dados);
+        dimensionService.createRelationMember(dimension, id);
+        return ResponseEntity.ok(new DimensionDetailMemeber(dimension));
     }
 }
 

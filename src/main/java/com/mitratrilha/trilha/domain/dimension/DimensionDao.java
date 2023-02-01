@@ -3,13 +3,16 @@ package com.mitratrilha.trilha.domain.dimension;
 import java.util.List;
 
 public interface DimensionDao {
-    int createDimension(Dimension dimension);
 
-    void createDimensionTeste(Dimension dimension);
+    void createDimension(Dimension dimension);
 
     List<Dimension> findDimensionMember(Long id);
 
-    List<Dimension> createDimensionMember(Dimension dimension, Long id);
+    int createDimensionMember(Dimension dimension, Long id);
 
     List<Dimension> findDimensionMemberByNameLast(Long id, String name);
+
+    List<Dimension> findDimensionMemberById(Long id, Long idMembro);
+
+    int updateDimensionMember(Dimension dimension, Long id);
 }

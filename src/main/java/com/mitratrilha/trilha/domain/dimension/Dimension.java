@@ -32,7 +32,17 @@ public class Dimension {
     }
 
     public Dimension(CreateDimensionMember dados) {
+        this.id = dados.id();
         this.name = dados.name();
+    }
+
+    public Dimension(UpdateDimensionMember dados) {
+        if(dados.name() != null) {
+            this.name = dados.name();
+        } else if (dados.sonid() != null) {
+            this.sonid = dados.sonid();
+        }
+        this.id = dados.id();
     }
 
 
@@ -42,4 +52,5 @@ public class Dimension {
         }
             this.sonid = dados.sonid();
     }
+
 }

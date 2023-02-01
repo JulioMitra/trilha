@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -25,15 +24,15 @@ public class DimensionController {
     private DimensionService dimensionService;
 
 
-    @PostMapping
-    @Transactional
-    public ResponseEntity create(@RequestBody @Valid CreateDimension dados, UriComponentsBuilder uriBuilder) {
-        var dimension = new Dimension(dados);
-        repository.save(dimension);
-
-        var uri = uriBuilder.path("/dimen/{id}").buildAndExpand(dimension.getId()).toUri();
-        return ResponseEntity.created(uri).body(new DimensionDetail(dimension));
-    }
+//    @PostMapping
+//    @Transactional
+//    public ResponseEntity create(@RequestBody @Valid CreateDimension dados, UriComponentsBuilder uriBuilder) {
+//        var dimension = new Dimension(dados);
+//        repository.save(dimension);
+//
+//        var uri = uriBuilder.path("/dimen/{id}").buildAndExpand(dimension.getId()).toUri();
+//        return ResponseEntity.created(uri).body(new DimensionDetail(dimension));
+//    }
 
     @GetMapping("/{id}")
     @JsonManagedReference
@@ -73,26 +72,34 @@ public class DimensionController {
         return ResponseEntity.ok("Dimensão excluída!");
     }
 
-    @PostMapping("/jdbc")
+    @PostMapping
     @Transactional
-    public ResponseEntity createDimensionTeste(@RequestBody @Valid CreateDimensionTeste dados) {
+    public ResponseEntity createDimension(@RequestBody @Valid CreateDimension dados) {
         var dimension = new Dimension(dados);
         repository.save(dimension);
-        dimensionService.createDimensionTeste(dimension);
+        dimensionService.createDimension(dimension);
         return ResponseEntity.ok(new DimensionDetail(dimension));
     }
 
-    @GetMapping("/jdbc/{id}")
-    public List<Dimension> read1(@PathVariable long id) {
+    @GetMapping("/member/{id}")
+    public List<Dimension> findDimensionMember(@PathVariable long id) {
         return dimensionService.findDimensionMember(id);
     }
 
-    @PostMapping("/jdbc/{id}")
+    @PostMapping("/member/{id}")
     @Transactional
     public ResponseEntity createDimensionMember(@RequestBody @Valid CreateDimensionMember dados, @PathVariable long id) {
         var dimension = new Dimension(dados);
         dimensionService.createDimensionMembers(dimension, id);
-        return ResponseEntity.ok(dimensionService.findDimensionMemberByNameLast(id, dimension.getName()));
+        return ResponseEntity.ok(new DimensionDetailMemeber(dimension));
       }
+
+    @PutMapping("/member/{id}")
+    @Transactional
+    public ResponseEntity updateDimensionMember(@RequestBody @Valid UpdateDimensionMember dados, @PathVariable long id) {
+        var dimension = new Dimension(dados);
+        dimensionService.updateDimensionMembers(dimension, id);
+        return ResponseEntity.ok(dimensionService.findDimensionMemberById(id, dimension.getId()));
+    }
 }
 

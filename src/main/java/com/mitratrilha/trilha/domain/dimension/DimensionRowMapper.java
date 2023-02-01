@@ -10,7 +10,8 @@ public class DimensionRowMapper implements RowMapper<DimensionDetailMemeber> {
     public DimensionDetailMemeber mapRow(ResultSet resultSet, int i) throws SQLException {
         DimensionDetailMemeber dimension = new DimensionDetailMemeber(
                 resultSet.getLong("id"),
-                resultSet.getString("name")
+                resultSet.getString("name"),
+                resultSet.getLong("sonid")
         );
         return dimension;
     }

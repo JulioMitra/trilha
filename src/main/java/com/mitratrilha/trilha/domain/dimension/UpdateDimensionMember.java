@@ -1,15 +1,13 @@
 package com.mitratrilha.trilha.domain.dimension;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateDimensionMember(
+public record UpdateDimensionMember(
 
         @NotNull
         Long id,
-
-        @NotBlank
-        String name
+        String name,
+        Long sonid
 
 ) {
 }

@@ -18,5 +18,5 @@ public interface DimensionDao {
 
     int deleteDimensionMember(Dimension idMembro, Long id);
 
-    int createRelationMember(RelationMember id, Long id);
+    int createRelationMember(RelationMember relationMember, Long id);
 }

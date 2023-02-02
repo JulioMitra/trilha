@@ -27,17 +27,17 @@ public class DimensionDataSource implements DimensionDao {
 
     @Override
     public void createDimension(Dimension dimension) {
-            String sql = "CREATE TABLE IF NOT EXISTS dimension_" + dimension.getId() + "("
-                         + "id int not null PRIMARY KEY,"
-                         + "name varchar(100) not null,"
-                         + "sonid int"
-                         + ");";
-            jdbcTemplate.execute(sql);
-        }
+        String sql = "CREATE TABLE IF NOT EXISTS dimension_" + dimension.getId() + "("
+                     + "id int not null PRIMARY KEY,"
+                     + "name varchar(100) not null,"
+                     + "sonid int"
+                     + ");";
+        jdbcTemplate.execute(sql);
+    }
 
     @Override
     public List<Dimension> findDimensionMember(Long id) {
-            String sql = "SELECT id, name, sonid FROM dimension_" + id + ";";
+        String sql = "SELECT id, name, sonid FROM dimension_" + id + ";";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Dimension dimension = new Dimension();
             dimension.setId(resultSet.getLong("id"));
@@ -49,13 +49,13 @@ public class DimensionDataSource implements DimensionDao {
 
     @Override
     public int createDimensionMember(Dimension dimension, Long id) {
-        String sql = "INSERT INTO dimension_"+ id +"(id, name) VALUES (?, ?);";
+        String sql = "INSERT INTO dimension_" + id + "(id, name) VALUES (?, ?);";
         return jdbcTemplate.update(sql, dimension.getId(), dimension.getName());
     }
 
     @Override
     public List<Dimension> findDimensionMemberByNameLast(Long id, String name) {
-        String sql = "SELECT id, name FROM dimension_" + id + " WHERE name LIKE '"+name+"' ORDER BY id DESC LIMIT 1;";
+        String sql = "SELECT id, name FROM dimension_" + id + " WHERE name LIKE '" + name + "' ORDER BY id DESC LIMIT 1;";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Dimension dimension = new Dimension();
             dimension.setId(resultSet.getLong("id"));
@@ -66,7 +66,7 @@ public class DimensionDataSource implements DimensionDao {
 
     @Override
     public List<Dimension> findDimensionMemberById(Long id, Long idMember) {
-        String sql = "SELECT id, name, sonid FROM dimension_" + id + " WHERE id = "+ idMember+";";
+        String sql = "SELECT id, name, sonid FROM dimension_" + id + " WHERE id = " + idMember + ";";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Dimension dimension = new Dimension();
             dimension.setId(resultSet.getLong("id"));
@@ -93,15 +93,18 @@ public class DimensionDataSource implements DimensionDao {
 
     @Override
     public int deleteDimensionMember(Dimension dimension, Long id) {
-        String sql = "DELETE FROM dimension_" + dimension.getId() + " WHERE id = "+dimension.getId()+";";
+        String sql = "DELETE FROM dimension_" + dimension.getId() + " WHERE id = " + dimension.getId() + ";";
         return jdbcTemplate.update(sql);
     }
 
 
     @Override
     public int createRelationMember(RelationMember id, Long idPai) {
-        String sql = "ALTER TABLE dimension_" +id.getIdTabelaFilho()  + " ADD COLUMN dimension_"+idPai+" INT IF NOT EXISTS WHERE id = ";
+        String sql = "ALTER TABLE dimension_" + id.getIdTabelaFilho() + " ADD COLUMN IF NOT EXISTS dimension_" + idPai
+                     + " INT;";
+        jdbcTemplate.update(sql);
+        String sql2 = "UPDATE dimension SET sonid = ? WHERE id = ?;";
+        return jdbcTemplate.update(sql2, idPai, id.getIdTabelaFilho());
 
-        return 0;
     }
 }

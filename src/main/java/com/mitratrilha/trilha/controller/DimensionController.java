@@ -117,7 +117,7 @@ public class DimensionController {
     public ResponseEntity createRelationMember(@RequestBody @Valid CreateRelationMember dados, @PathVariable Long id) {
         var dimension = new RelationMember(dados);
         dimensionService.createRelationMember(dimension, id);
-        return ResponseEntity.ok(new DimensionDetailMemeber(dimension));
+        return ResponseEntity.ok("Relacionamento entre a Dimensão "+id+" e a Dimensão "+dados.idTabelaFilho()+" " +
+                                 "realizado com sucesso!");
     }
 }
-

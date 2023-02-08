@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -74,25 +75,30 @@ public class DimensionController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity createDimension(@RequestBody @Valid CreateDimension dados) {
+    public ResponseEntity createDimension(@RequestBody @Valid CreateDimension dados, UriComponentsBuilder uriBuilder) {
         var dimension = new Dimension(dados);
         repository.save(dimension);
         dimensionService.createDimension(dimension);
-        return ResponseEntity.ok(new DimensionDetail(dimension));
+
+        var uri = uriBuilder.path("/dimen/{id}").buildAndExpand(dimension.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DimensionDetail(dimension));
     }
 
     // Membro de Dimensão
     @GetMapping("/member/{id}")
-    public List<Dimension> findDimensionMember(@PathVariable long id) {
-        return dimensionService.findDimensionMember(id);
+    public ResponseEntity findDimensionMember(@PathVariable long id) {
+        return ResponseEntity.ok(dimensionService.findDimensionMember(id));
     }
 
     @PostMapping("/member/{id}")
     @Transactional
-    public ResponseEntity createDimensionMember(@RequestBody @Valid CreateDimensionMember dados, @PathVariable long id) {
+    public ResponseEntity createDimensionMember(@RequestBody @Valid CreateDimensionMember dados,
+                                                @PathVariable long id, UriComponentsBuilder uriBuilder) {
         var dimension = new Dimension(dados);
         dimensionService.createDimensionMember(dimension, id);
-        return ResponseEntity.ok(new DimensionDetailMemeber(dimension));
+
+        var uri = uriBuilder.path("/dimen/member/{id}").buildAndExpand(dimension.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DimensionDetailMemeber(dimension));
       }
 
     @PutMapping("/member/{id}")
@@ -114,10 +120,31 @@ public class DimensionController {
     // Relacionamento de Membros de Dimensão
     @PostMapping("/relation/{id}")
     @Transactional
-    public ResponseEntity createRelationMember(@RequestBody @Valid CreateRelationMember dados, @PathVariable Long id) {
+    public ResponseEntity createRelationMember(@RequestBody @Valid CreateRelationMember dados, @PathVariable Long id,
+     UriComponentsBuilder uriBuilder) {
         var dimension = new RelationMember(dados);
         dimensionService.createRelationMember(dimension, id);
-        return ResponseEntity.ok("Relacionamento entre a Dimensão "+id+" e a Dimensão "+dados.idTabelaFilho()+" " +
-                                 "realizado com sucesso!");
+
+        var uri = uriBuilder.path("/dimen/relation/{id}").buildAndExpand(id).toUri();
+        return ResponseEntity.created(uri).body("Relacionamento entre a Dimensão Pai "+id+" e a Dimensão Filha "+dados.idTabelaFilho()
+                                 + " realizado com sucesso!");
+    }
+
+    @PutMapping("/relation/{id}")
+    @Transactional
+    public ResponseEntity updateRelationMember(@RequestBody @Valid UpdateRelationMember dados, @PathVariable Long id) {
+        var dimension = new RelationMember(dados);
+        dimensionService.updateRelationMember(dimension, id);
+        return ResponseEntity.ok("Relacionamento entre membros da Dimensão Pai "+id+" e da Dimensão Filha "
+                                 +dados.idTabelaFilho()+ " atualizados com sucesso!");
+    }
+
+    @DeleteMapping("/relation/{id}")
+    @Transactional
+    public ResponseEntity deleteRelationMember(@RequestBody @Valid DeleteRelationMember dados, @PathVariable Long id) {
+        var dimension = new RelationMember(dados);
+        dimensionService.deleteRelationMember(dimension, id);
+        return ResponseEntity.ok("Relacionamento entre membros da Dimensão Pai "+id+" e da Dimensão Filha "
+                                 +dados.idTabelaFilho()+ " excluídos com sucesso!");
     }
 }

@@ -6,17 +6,19 @@ public interface DimensionDao {
 
     void createDimension(Dimension dimension);
 
-    List<Dimension> findDimensionMember(Long id);
+    List<DimensionView> findDimensionMember(Long id);
 
     int createDimensionMember(Dimension dimension, Long id);
 
-    List<Dimension> findDimensionMemberByNameLast(Long id, String name);
-
-    List<Dimension> findDimensionMemberById(Long id, Long idMembro);
+    List<DimensionView> findDimensionMemberById(Long id, Long idMembro);
 
     int updateDimensionMember(Dimension dimension, Long id);
 
     int deleteDimensionMember(Dimension idMembro, Long id);
 
     int createRelationMember(RelationMember relationMember, Long id);
+
+    int updateRelationMember(RelationMember relationMember, Long id);
+
+    int deleteRelationMember(RelationMember relationMember, Long id);
 }

@@ -1,5 +1,6 @@
 package com.mitratrilha.trilha.service;
 
+import com.mitratrilha.trilha.domain.dimension.DimensionView;
 import com.mitratrilha.trilha.domain.dimension.RelationMember;
 import com.mitratrilha.trilha.domain.dimension.Dimension;
 import com.mitratrilha.trilha.domain.dimension.DimensionDao;
@@ -22,12 +23,8 @@ public class DimensionService {
         dimensionDao.createDimension(dimension);
     }
 
-    public List<Dimension> findDimensionMember(Long id) {
-        if (id != null) {
-            return dimensionDao.findDimensionMember(id);
-        }
-        System.out.println("Valor nulo camada serviço!");
-        return null;
+    public List<DimensionView> findDimensionMember(Long id) {
+        return dimensionDao.findDimensionMember(id);
     }
 
 
@@ -41,20 +38,9 @@ public class DimensionService {
         return null;
     }
 
-    public List<Dimension> findDimensionMemberByNameLast(Long id, String name) {
-        if (id != null) {
-            return dimensionDao.findDimensionMemberByNameLast(id, name);
-        }
-        System.out.println("Valor nulo camada serviço!");
-        return null;
-    }
 
-    public List<Dimension> findDimensionMemberById(Long id, Long idMember) {
-        if (id != null) {
-            return dimensionDao.findDimensionMemberById(id, idMember);
-        }
-        System.out.println("Valor nulo camada serviço!");
-        return null;
+    public List<DimensionView> findDimensionMemberById(Long id, Long idMember) {
+        return dimensionDao.findDimensionMemberById(id, idMember);
     }
 
 
@@ -65,6 +51,16 @@ public class DimensionService {
 
     public List<RelationMember> createRelationMember(RelationMember dimension, Long id) {
         dimensionDao.createRelationMember(dimension, id);
+        return null;
+    }
+
+    public List<RelationMember> updateRelationMember(RelationMember dimension, Long id) {
+        dimensionDao.updateRelationMember(dimension, id);
+        return null;
+    }
+
+    public List<RelationMember> deleteRelationMember(RelationMember dimension, Long id) {
+        dimensionDao.deleteRelationMember(dimension, id);
         return null;
     }
 

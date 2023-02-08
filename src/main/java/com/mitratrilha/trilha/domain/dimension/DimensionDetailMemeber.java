@@ -2,10 +2,10 @@ package com.mitratrilha.trilha.domain.dimension;
 
 import java.util.List;
 
-public record DimensionDetailMemeber(Long id, String name, Long sonid) {
+public record DimensionDetailMemeber(Long id, String name) {
 
     public DimensionDetailMemeber(Dimension dimension) {
-        this(dimension.getId(), dimension.getName(), dimension.getSonid());
+        this(dimension.getId(), dimension.getName());
     }
 
 }

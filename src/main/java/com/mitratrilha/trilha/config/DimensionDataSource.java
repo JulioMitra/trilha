@@ -1,5 +1,9 @@
 package com.mitratrilha.trilha.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mitratrilha.trilha.domain.dimension.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -199,8 +203,7 @@ public class DimensionDataSource implements DimensionDao{
     }
 
 
-    @Override
-    public DimensionNode showRelationMember(Long id) {
+    private String buildQuery(Long id) {
         DimensionNode nodes = showRelationTree(id);
         String select = buildSelect(nodes);
         String sql = "SELECT " + select + " FROM dimension_" + id + " d" + id;
@@ -215,11 +218,29 @@ public class DimensionDataSource implements DimensionDao{
         }
 
         System.out.println(sql);
-        return null;
+        return sql;
+    }
+
+    @Override
+    public List<Tabela> showRelationMember(Long id) {
+        String sql = buildQuery(id);
+        List<Tabela> resultados = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Tabela tabela = new Tabela();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int numColunas = metaData.getColumnCount();
+            for (int i = 1; i <= numColunas; i++) {
+                String nomeColuna = metaData.getColumnName(i);
+                Object valorColuna = rs.getObject(i);
+                tabela.addColuna(nomeColuna, valorColuna);
+            }
+            return tabela;
+        });
+        return resultados;
     }
 
     private String buildSelect(DimensionNode node) {
-        String select = "d"+ node.getId() + ".id, d" + node.getId() + ".name";
+        String select =
+                "d"+ node.getId() + ".id AS d"+node.getId()+"id, d" + node.getId() + ".name AS d"+ node.getId() +"name";
 
         for (DimensionNode filho : node.getParents()) {
             select += ", " + buildSelect(filho);
@@ -239,5 +260,25 @@ public class DimensionDataSource implements DimensionDao{
         return joinAdicional;
     }
 
+    public ObjectNode executeQuery(String query) throws SQLException, JsonProcessingException {
+        ObjectNode resultNode = JsonNodeFactory.instance.objectNode();
+        ArrayNode rowsNode = resultNode.putArray("rows");
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            ResultSetMetaData metadata = rs.getMetaData();
+            int numColumns = metadata.getColumnCount();
+            while (rs.next()) {
+                ObjectNode rowNode = JsonNodeFactory.instance.objectNode();
+                for (int i = 1; i <= numColumns; i++) {
+                    String columnName = metadata.getColumnName(i);
+                    Object value = rs.getObject(i);
+                    rowNode.set(columnName, JsonNodeFactory.instance.pojoNode(value));
+                }
+                rowsNode.add(rowNode);
+            }
+        }
+        return resultNode;
+    }
 
 }

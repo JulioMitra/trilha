@@ -24,5 +24,6 @@ public interface DimensionDao {
 
     DimensionNode showRelationTree(Long id);
 
-    DimensionNode showRelationMember(Long id);
+
+    List<Tabela> showRelationMember(Long id);
 }

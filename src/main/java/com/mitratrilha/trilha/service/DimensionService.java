@@ -65,9 +65,9 @@ public class DimensionService {
         return dimensionDao.showRelationTree(id);
     }
 
-    public DimensionNode showRelationMember(Long id) {
+
+    public List<Tabela> showRelationMember(Long id) {
         return dimensionDao.showRelationMember(id);
     }
-
 }
 

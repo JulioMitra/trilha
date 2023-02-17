@@ -156,12 +156,18 @@ public class DimensionController {
         return ResponseEntity.ok(dimensionNode);
     }
 
+//    @GetMapping("/relation/member/{id}")
+//    public ResponseEntity showRelationMember(@PathVariable Long id) {
+//        DimensionNode dimensionNode = dimensionService.showRelationMember(id);
+//        if(dimensionNode == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(dimensionNode);
+//    }
+
     @GetMapping("/relation/member/{id}")
-    public ResponseEntity showRelationMember(@PathVariable Long id) {
-        DimensionNode dimensionNode = dimensionService.showRelationMember(id);
-        if(dimensionNode == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(dimensionNode);
+    public ResponseEntity getTabela(@PathVariable Long id) {
+        List<Tabela> resultado = dimensionService.showRelationMember(id);
+        return ResponseEntity.ok(resultado);
     }
 }

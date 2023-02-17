@@ -26,10 +26,6 @@ public class Dimension {
         this.name = dados.name();
     }
 
-    public Dimension(CreateDimensionTeste dados) {
-
-        this.name = dados.name();
-    }
 
     public Dimension(CreateDimensionMember dados) {
         this.id = dados.id();

@@ -52,7 +52,6 @@ public class DimensionController {
         }).toList();
     }
 
-
     @GetMapping
     public List<DimensionDetail> read() {
         return repository.findAll().stream().map(DimensionDetail::new).toList();
@@ -146,5 +145,23 @@ public class DimensionController {
         dimensionService.deleteRelationMember(dimension, id);
         return ResponseEntity.ok("Relacionamento entre membros da Dimensão Pai "+id+" e da Dimensão Filha "
                                  +dados.idTabelaFilho()+ " excluídos com sucesso!");
+    }
+
+    @GetMapping("/relation/tree/{id}")
+    public ResponseEntity showRelationTree(@PathVariable Long id) {
+        DimensionNode dimensionNode = dimensionService.showRelationTree(id);
+        if(dimensionNode == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dimensionNode);
+    }
+
+    @GetMapping("/relation/member/{id}")
+    public ResponseEntity showRelationMember(@PathVariable Long id) {
+        DimensionNode dimensionNode = dimensionService.showRelationMember(id);
+        if(dimensionNode == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dimensionNode);
     }
 }

@@ -21,4 +21,8 @@ public interface DimensionDao {
     int updateRelationMember(RelationMember relationMember, Long id);
 
     int deleteRelationMember(RelationMember relationMember, Long id);
+
+    DimensionNode showRelationTree(Long id);
+
+    DimensionNode showRelationMember(Long id);
 }

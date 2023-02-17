@@ -1,9 +1,6 @@
 package com.mitratrilha.trilha.service;
 
-import com.mitratrilha.trilha.domain.dimension.DimensionView;
-import com.mitratrilha.trilha.domain.dimension.RelationMember;
-import com.mitratrilha.trilha.domain.dimension.Dimension;
-import com.mitratrilha.trilha.domain.dimension.DimensionDao;
+import com.mitratrilha.trilha.domain.dimension.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,6 +59,14 @@ public class DimensionService {
     public List<RelationMember> deleteRelationMember(RelationMember dimension, Long id) {
         dimensionDao.deleteRelationMember(dimension, id);
         return null;
+    }
+
+    public DimensionNode showRelationTree(Long id) {
+        return dimensionDao.showRelationTree(id);
+    }
+
+    public DimensionNode showRelationMember(Long id) {
+        return dimensionDao.showRelationMember(id);
     }
 
 }

@@ -165,7 +165,7 @@ public class DimensionController {
 //        return ResponseEntity.ok(dimensionNode);
 //    }
 
-    @GetMapping("/relation/member/{id}")
+    @GetMapping("/relation/{id}")
     public ResponseEntity getTabela(@PathVariable Long id) {
         List<Tabela> resultado = dimensionService.showRelationMember(id);
         return ResponseEntity.ok(resultado);

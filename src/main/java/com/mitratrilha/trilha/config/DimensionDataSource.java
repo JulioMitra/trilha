@@ -7,16 +7,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mitratrilha.trilha.domain.dimension.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class DimensionDataSource implements DimensionDao{
@@ -259,26 +255,4 @@ public class DimensionDataSource implements DimensionDao{
         }
         return joinAdicional;
     }
-
-    public ObjectNode executeQuery(String query) throws SQLException, JsonProcessingException {
-        ObjectNode resultNode = JsonNodeFactory.instance.objectNode();
-        ArrayNode rowsNode = resultNode.putArray("rows");
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            ResultSetMetaData metadata = rs.getMetaData();
-            int numColumns = metadata.getColumnCount();
-            while (rs.next()) {
-                ObjectNode rowNode = JsonNodeFactory.instance.objectNode();
-                for (int i = 1; i <= numColumns; i++) {
-                    String columnName = metadata.getColumnName(i);
-                    Object value = rs.getObject(i);
-                    rowNode.set(columnName, JsonNodeFactory.instance.pojoNode(value));
-                }
-                rowsNode.add(rowNode);
-            }
-        }
-        return resultNode;
-    }
-
 }

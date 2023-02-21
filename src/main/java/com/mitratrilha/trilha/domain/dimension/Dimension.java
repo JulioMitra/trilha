@@ -3,8 +3,6 @@ package com.mitratrilha.trilha.domain.dimension;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Table(name = "dimension")
 @Entity(name = "Dimension")
 @Getter

@@ -1,9 +1,6 @@
 package com.mitratrilha.trilha.domain.dimension;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-
 import java.util.List;
 
 

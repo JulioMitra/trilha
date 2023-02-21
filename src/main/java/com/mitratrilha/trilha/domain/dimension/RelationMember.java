@@ -1,12 +1,13 @@
 package com.mitratrilha.trilha.domain.dimension;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor

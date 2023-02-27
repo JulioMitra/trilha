@@ -1,0 +1,40 @@
+[
+  {
+    "id":1,
+    "name":"Cidade",
+    "sonid":null,
+    "parents": [
+      {
+        "id":2,
+        "name":"Estado",
+        "sonid":1,
+        "parents": [
+          {
+            "id":3,
+            "name":"País",
+            "sonid":2,
+            "parents": []
+          },
+          {
+            "id":6,
+            "name":"Governador",
+            "sonid":2,
+            "parents": []
+          }
+        ]
+      },
+      {
+        "id":4,
+        "name":"DDD",
+        "sonid":1,
+        "parents": []
+      },
+      {
+        "id":5,
+        "name":"Prefeito",
+        "sonid":1,
+        "parents": []
+      }
+    ]
+  }
+]

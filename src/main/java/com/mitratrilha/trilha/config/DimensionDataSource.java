@@ -1,9 +1,5 @@
 package com.mitratrilha.trilha.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mitratrilha.trilha.domain.dimension.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -198,25 +194,6 @@ public class DimensionDataSource implements DimensionDao{
         return parentIds;
     }
 
-
-    private String buildQuery(Long id) {
-        DimensionNode nodes = showRelationTree(id);
-        String select = buildSelect(nodes);
-        String sql = "SELECT " + select + " FROM dimension_" + id + " d" + id;
-
-        // Adicionar um JOIN para cada nó filho
-        for(DimensionNode parent: nodes.getParents()){
-            sql += " JOIN dimension_" + parent.getId() + " d" + parent.getId() + " ON d" +
-                   parent.getId() + ".id = d" + nodes.getId() + ".dimension_" + parent.getId();
-
-            // Adicionar os JOINs para os nós filhos dos nós pais recursivamente
-            sql += buildJoin(parent);
-        }
-
-        System.out.println(sql);
-        return sql;
-    }
-
     @Override
     public List<Tabela> showRelationMember(Long id) {
         String sql = buildQuery(id);
@@ -249,10 +226,57 @@ public class DimensionDataSource implements DimensionDao{
         String joinAdicional = "";
 
         for (DimensionNode filho : node.getParents()) {
-            joinAdicional += " JOIN dimension_" + filho.getId() + " d" + filho.getId() + " ON d" +
+
+            //Verifica se existe a coluna na tabela filha
+            String existColumn =
+                    "SELECT COUNT(1) FROM information_schema.columns WHERE table_name = 'dimension_"+node.getId()+
+                    "' AND column_name LIKE 'dimension_"+filho.getId()+"';";
+            int numCols = jdbcTemplate.queryForObject(existColumn, Integer.class);
+
+            if(numCols == 0) {
+
+                joinAdicional += " LEFT JOIN dimension_" + filho.getId() + " d" + filho.getId() + " ON d" +
+                                 filho.getId() + ".id = NULL";
+                joinAdicional += buildJoin(filho);
+            }else
+            joinAdicional += " LEFT JOIN dimension_" + filho.getId() + " d" + filho.getId() + " ON d" +
                              filho.getId() + ".id = d" + node.getId() + ".dimension_" + filho.getId();
             joinAdicional += buildJoin(filho);
         }
         return joinAdicional;
+    }
+
+    private String buildQuery(Long id) {
+        DimensionNode nodes = showRelationTree(id);
+        String select = buildSelect(nodes);
+        String sql = "SELECT " + select + " FROM dimension_" + id + " d" + id;
+
+        // Adicionar um JOIN para cada nó filho
+        for(DimensionNode parent: nodes.getParents()){
+
+            //Verifica se existe a coluna na tabela filha
+            String existColumn =
+                    "SELECT COUNT(1) FROM information_schema.columns WHERE table_name = 'dimension_"+nodes.getId()+
+                    "' AND column_name LIKE 'dimension_"+parent.getId()+"';";
+            int numCols = jdbcTemplate.queryForObject(existColumn, Integer.class);
+
+            if(numCols == 0) {
+
+                sql += " LEFT JOIN dimension_" + parent.getId() + " d" + parent.getId() + " ON d" +
+                       parent.getId() + ".id = NULL";
+
+                // Adicionar os JOINs para os nós filhos dos nós pais recursivamente
+                sql += buildJoin(parent);
+            }else
+            sql += " LEFT JOIN dimension_" + parent.getId() + " d" + parent.getId() + " ON d" +
+                   parent.getId() + ".id = d" + nodes.getId() + ".dimension_" + parent.getId();
+
+            // Adicionar os JOINs para os nós filhos dos nós pais recursivamente
+            sql += buildJoin(parent);
+
+        }
+
+        System.out.println(sql);
+        return sql;
     }
 }

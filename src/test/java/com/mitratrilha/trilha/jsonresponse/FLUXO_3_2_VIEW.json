@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Cidade",
+    "sonid": null
+  },
+  {
+    "id": 2,
+    "name": "Estado",
+    "sonid": null
+  },
+  {
+    "id": 3,
+    "name": "País",
+    "sonid": null
+  },
+  {
+    "id": 4,
+    "name": "DDD",
+    "sonid": null
+  },
+  {
+    "id": 5,
+    "name": "Prefeito",
+    "sonid": null
+  },
+  {
+    "id": 6,
+    "name": "Governador",
+    "sonid": null
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "idTabelaFilho": 1,
+  "parents": [
+    {
+      "idMembroFilho": 1,
+      "idMembroPai": 3
+    }
+  ]
+}

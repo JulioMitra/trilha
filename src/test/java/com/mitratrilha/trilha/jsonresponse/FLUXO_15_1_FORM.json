@@ -1,0 +1,25 @@
+{
+  "idTabelaFilho": 1,
+  "parents": [
+    {
+      "idMembroFilho": 1,
+      "idMembroPai": 34
+    },
+    {
+      "idMembroFilho": 3,
+      "idMembroPai": 34
+    },
+    {
+      "idMembroFilho": 4,
+      "idMembroPai": 62
+    },
+    {
+      "idMembroFilho": 5,
+      "idMembroPai": 64
+    },
+    {
+      "idMembroFilho": 6,
+      "idMembroPai": 11
+    }
+  ]
+}
